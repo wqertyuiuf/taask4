@@ -1,0 +1,97 @@
+// 1 
+#include <iostream>
+#include <cstdlib>
+int main() {
+    const char* userProfile = std::getenv("USERPROFILE");
+    const char* home = std::getenv("HOME");
+    if (userProfile) {
+        std::cout << "Значение переменной окружения USERPROFILE: " << userProfile << std::endl;
+    } else if (home) {
+        std::cout << "Значение переменной окружения HOME: " << home << std::endl;
+    } else {
+        std::cout << "Переменные окружения USERPROFILE и HOME не найдены." << std::endl;
+    }
+    return 0;
+}
+
+// 2 
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+#include <chrono>
+void bubbleSort(std::vector<int>& arr) {
+    int n = arr.size();
+    for (int i = 0; i < n - 1; ++i) {
+        for (int j = 0; j < n - i - 1; ++j) {
+            if (arr[j] > arr[j + 1]) {
+                std::swap(arr[j], arr[j + 1]);
+            }
+        }
+    }
+}
+int main() {
+    const int size = 1000;
+    std::vector<int> arr(size);
+    std::srand(static_cast<unsigned int>(std::
+    for (int i = 0; i < size; ++i) {
+        arr[i] = std::rand() % 10000;
+    }
+    auto start = std::chrono::high_resolution_clock::now();
+    bubbleSort(arr);
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration = end - start;
+    std::cout << "Время выполнения пузырьковой сортировки: " << duration.count() << " секунд" << std::endl;
+    return 0;
+}
+
+// 3 
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+#include <chrono>
+#include <algorithm>
+void generateRandomNumbers(const std::string& filename) {
+    std::ofstream outFile(filename);
+    if (!outFile) {
+        std::cerr << "Не удалось открыть файл для записи!" << std::endl;
+        return;
+    }
+    for (int i = 0; i < 10; ++i) {
+        outFile << std::rand() % 100 << std::endl; // Случайные числа от 0 до 99
+    }
+    outFile.close();
+}
+std::vector<int> readNumbersFromFile(const std::string& filename) {
+    std::ifstream inFile(filename);
+    std::vector<int> numbers;
+    int number;
+    if (!inFile) {
+        std::cerr << "Не удалось открыть файл для чтения!" << std::endl;
+        return numbers;
+    }
+    while (inFile >> number) {
+        numbers.push_back(number);
+    }
+    inFile.close();
+    return numbers;
+}
+int main() {
+    const std::string filename = "random_numbers.txt";
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+    auto start = std::chrono::high_resolution_clock::now();
+    generateRandomNumbers(filename);
+    std::vector<int> numbers = readNumbersFromFile(filename);
+    std::sort(numbers.begin(), numbers.end());
+    std::cout << "Отсортированные числа:" << std::endl;
+    for (int num : numbers) {
+        std::cout << num << " ";
+    }
+    std::cout << std::endl;
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration = end - start;
+    std::cout << "Время выполнения всех операций: " << duration.count() << " секунд" << std::endl;
+    return 0;
+}
