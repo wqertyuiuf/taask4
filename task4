@@ -1,0 +1,69 @@
+// 1
+#include <iostream>
+#include <fstream>
+#include <string>
+int main() {
+    std::string filename;
+    std::cout << "Введите имя файла для записи: ";
+    std::getline(std::cin, filename);
+    std::ofstream outFile(filename);
+    if (!outFile) {
+        std::cerr << "Ошибка: не удалось открыть файл " << filename << " для записи." << std::endl;
+        return 1;
+    }
+    std::string line;
+    for (int i = 0; i < 5; ++i) {
+        std::cout << "Введите строку " << (i + 1) << ": ";
+        std::getline(std::cin, line);
+        outFile << line << std::endl; // Записываем строку в файл
+    }
+    outFile.close();
+    std::cout << "Данные успешно записаны в файл " << filename << "." << std::endl;
+    return 0;
+}
+
+// 2 
+#include <iostream>
+#include <fstream>
+#include <string>
+int main() {
+    std::ifstream inFile("data.txt");
+    if (!inFile) {
+        std::cerr << "Ошибка: не удалось открыть файл data.txt." << std::endl;
+        return 1; // Выходим с кодом ошибки
+    }
+    std::string line;
+    std::cout << "Строки, содержащие 'C++':" << std::endl;
+    while (std::getline(inFile, line)) {
+        // Проверяем, содержит ли строка слово "C++"
+        if (line.find("C++") != std::string::npos) {
+            std::cout << line << std::endl; // Выводим строку, если она содержит "C++"
+        }
+    }
+    inFile.close();
+    return 0;
+}
+
+// 3 
+#include <iostream>
+#include <string>
+#include <regex>
+
+int main() {
+    std::string input;
+    std::cout << "Введите строку: ";
+    std::getline(std::cin, input);
+    std::regex email_regex(R"((w+)(.w+)*@(w+)(.w+)+)");
+    auto it = std::sregex_iterator(input.begin(), input.end(), email_regex);
+    auto end = std::sregex_iterator();
+    if (it == end) {
+        std::cout << "Email-адреса не найдены." << std::endl;
+    } else {
+        std::cout << "Найденные email-адреса:" << std::endl;
+        for (; it != end; ++it) {
+            std::cout << it->str() << std::endl;
+        }
+    }
+    return 0;
+}
+
